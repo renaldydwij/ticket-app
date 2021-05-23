@@ -14,7 +14,9 @@
           <img src="./img/profile.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Renaldy Dwi Julianto</a>
+          <a href="#" class="d-block">
+            {{ Auth::user()->name }}
+          </a>
         </div>
       </div>
 
@@ -35,38 +37,87 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Starter Pages
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Active Page</p>
-                </a>
-              </li>
-              <li class="nav-item">
+            <li class="nav-item">
+                <router-link to="/dashboard" class="nav-link">
+                  <i class="fas fa-tachometer-alt nav-icon blue"></i>
+                  <p>
+                    Dashboard
+                  </p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/profile" class="nav-link">
+                  <i class="fas fa-user nav-icon blue"></i>
+                  <p>
+                    Profile
+                  </p>
+                </router-link>
+            </li>
+          
+            <li class="nav-item menu-open">
                 <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
+                <i class="fas fa-cogs nav-icon yellow"></i>
+                <p>
+                    Management
+                    <i class="right fas fa-angle-left"></i>
+                </p>
                 </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
-          </li>
+                <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <router-link to="/customer" class="nav-link">
+                    <i class="fas fa-cogs nav-icon yellow"></i>
+                    <p>Customer</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/status" class="nav-link">
+                    <i class="fas fa-cogs nav-icon yellow"></i>
+                    <p>Status</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/priority" class="nav-link">
+                    <i class="fas fa-cogs nav-icon yellow"></i>
+                    <p>Priority</p>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/user" class="nav-link">
+                    <i class="fas fa-users nav-icon yellow"></i>
+                    <p>User</p>
+                    </router-link>
+                </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                    <router-link to="/ticket" class="nav-link">
+                    <i class="fas fa-ticket-alt nav-icon blue"></i>
+                    <p>
+                        Ticket
+                    </p>
+                    </router-link>
+            </li>
+            <li class="nav-item">
+                    <router-link to="/rating" class="nav-link">
+                    <i class="fas fa-users nav-icon yellow"></i>
+                    <p>
+                        Rating
+                    </p>
+                    </router-link>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('logout') }}"
+                  onclick="event.preventDefault();
+                  document.getElementById('logout-form').submit();">
+                  <i class="fas fa-sign-out-alt nav-icon red"></i>
+                    <p>
+                      {{ __('Logout') }}
+                    </p>
+                </a>
+                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                     @csrf
+                 </form>
+            </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
