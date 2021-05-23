@@ -20,6 +20,8 @@
                       <th>Name</th>
                       <th>Customer</th>
                       <th>Email</th>
+                      <th>Date Open</th>
+                      <th>Development</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -29,7 +31,7 @@
                       <td>{{ticket.name_customer}}</td>
                       <td>{{ticket.email}}</td>
                       <td>{{ticket.created_at | myDate }}</td>
-
+                      <td>{{ticket.development}}</td>
                       <td>
                           <a href="#">
                               <i class="fas fa-info-circle green"></i>
