@@ -30,7 +30,7 @@
       <form method="POST" action="{{ route('register') }}">
         @csrf
         <div class="input-group mb-3">
-          <input name="name" class="form-control" placeholder="Name">
+          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="Name" autofocus>
           <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-user"></span>
@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+          <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password_confirmation" class="form-control" placeholder="Confirmation Password">
+          <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="Password Confirmation">
           <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-lock"></span>
