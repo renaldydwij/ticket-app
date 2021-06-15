@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Ticket extends Model
 {
     use HasFactory;
@@ -15,7 +16,7 @@ class Ticket extends Model
         'name',
         'email',
         'comment',
-        'photo',
+        'image',
         'name_status',
         'name_priority',
         'development'

@@ -16,7 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::latest()->paginate(10);
+        
+        return User::latest()->paginate(5);
     }
 
     /**
@@ -49,6 +50,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function profile()
+    {
+        return auth('api')->user();
+    }
+
+    /**
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
         //
@@ -63,7 +76,17 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $this->validate($request, [
+            'name' => 'required|string|max:50',
+            'email' => 'required|string|email|max:50|unique:users,email,'.$user->id,
+            'password' => 'sometimes|string|min:8'
+        ]);
+
+        $user->update($request->all()); 
+
+        return ['message' => 'Updated the user info'];
     }
 
     /**
@@ -74,6 +97,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        /* $this->authorize('isAdmin'); */
+
         $user = User::findOrFail($id);
         // delete the user
 

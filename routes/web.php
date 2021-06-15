@@ -21,6 +21,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+/* Route::get('/password/reset', [HomeController::class, 'index'])->name('password.request'); */
+/* Route::get('/ticket', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket'); */
 
 Route::get('/{any}', [HomeController::class, 'index'])->where('any', '.*');

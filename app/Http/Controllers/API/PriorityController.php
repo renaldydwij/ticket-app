@@ -15,7 +15,7 @@ class PriorityController extends Controller
      */
     public function index()
     {
-        return Priority::latest()->paginate(10);
+        return Priority::latest()->paginate(5);
     }
 
     /**
@@ -26,6 +26,10 @@ class PriorityController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|string|max:50'
+            ]);
+        
         return Priority::create([
             'name' => $request->name
         ]);
@@ -51,7 +55,11 @@ class PriorityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $priority = Priority::findOrFail($id);
+
+        $priority->update($request->all()); 
+
+        return ['message' => 'Updated the priority info'];
     }
 
     /**

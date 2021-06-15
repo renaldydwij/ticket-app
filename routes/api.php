@@ -29,3 +29,5 @@ Route::apiResources(['status' => StatusController::class]);
 Route::apiResources(['priority' => PriorityController::class]);
 Route::apiResources(['ticket' => TicketController::class]);
 Route::apiResources(['rating' => RatingController::class]);
+
+Route::get('profile',  [UserController::class, 'profile']);

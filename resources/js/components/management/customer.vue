@@ -1,20 +1,21 @@
 <template>
     <div class="container">
-        <div class="row mt-5">
+        <div class="row">
           <div class="col-md-12">
+              <br>
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Customer</h3>
 
                 <div class="card-tools">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCustomer">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCustomer" @click="newModal">
                         Add Customer <i class="fas fa-user-plus" />
                     </button>
                 </div>
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+                <table class="table table-hover text-nowrap" id="myTable">
                   <thead>
                     <tr>
                       <th>ID</th>
@@ -30,21 +31,22 @@
                       <td>{{customer.created_at | myDate }}</td>
 
                       <td>
-                          <a href="#">
-                              <i class="fas fa-info-circle green"></i>
-                          </a>
-                          <a href="#">
-                              <i class="fas fa-edit blue"></i>
-                          </a>
-                          <a href="#" @click="deleteCustomer(customer.id)">
-                              <i class="fas fa-trash red"></i>
-                          </a>
+                          <button class="btn btn-primary btn-sm" @click="editModal(customer)">
+                              <span class="fas fa-edit"></span>
+                          </button>
+                          <button class="btn btn-danger btn-sm" @click="deleteCustomer(customer.id)">
+                              <span class="fas fa-trash"></span>
+                          </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
+              <!-- <div class="card-footer">
+                    <pagination :data="customers" 
+                        @pagination-change-page="getResults"></pagination>
+              </div> -->
             </div>
             <!-- /.card -->
           </div>
@@ -55,12 +57,13 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addCustomerLabel">Add Customer</h5>
+                <h5 v-show="!editmode" class="modal-title" id="addCustomerLabel">Add Customer</h5>
+                <h5 v-show="editmode" class="modal-title" id="addCustomerLabel">Update Customer</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form @submit.prevent="createCustomer">
+            <form @submit.prevent="editmode ? updateCustomer() : createCustomer()">
             <div class="modal-body">
                 <div class="form-group">
                         <input v-model="form.name_customer" type="text" name="name_customer"
@@ -73,7 +76,16 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button @click="saveSession()" v-show="!editmode" type="submit" class="btn btn-primary">
+                    <div v-if="loading" class="spinner-border spinner-border-sm"></div>
+                    <span v-if="loading">Create</span>
+                    <span v-else >Create</span>
+                </button>
+                <button @click="saveSession()" v-show="editmode" type="submit" class="btn btn-success">
+                    <div v-if="loading" class="spinner-border spinner-border-sm"></div>
+                    <span v-if="loading">Update</span>
+                    <span v-else >Update</span>
+                </button>
             </div>
             </form>
             </div>
@@ -83,9 +95,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+import $ from 'jquery';
+
     export default {
-        data() {
+        data: function() {
             return {
+                editmode: false,
                 customers: {},
                 form: new Form({
                     id: '',
@@ -94,6 +110,47 @@
             }
         },
         methods: {
+            saveSession(){
+                this.loading=!false
+                setTimeout(()=> {
+                    this.loading=!true
+                }, 10)
+            },
+           /*  getResults(page = 1) {
+                axios.get('api/customer?page=' + page)
+                    .then(response => {
+                        this.customers = response.data;
+                    });
+            }, */
+            updateCustomer(){
+                this.$Progress.start();
+                this.form.put('api/customer/'+this.form.id)
+                .then(() => {
+                    Fire.$emit('refreshData');
+                    // success
+                    $('#addCustomer').modal('hide');
+                     Swal.fire(
+                        'Updated!',
+                        'Customer has been updated.',
+                        'success'
+                        )
+                        this.$Progress.finish();
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                });
+            },
+            editModal(customer){
+                this.editmode = true;
+                this.form.reset();
+                $('#addCustomer').modal("show");
+                this.form.fill(customer);
+            },
+            newModal(){
+                this.editmode = false;
+                this.form.reset();
+                $('#addCustomer').modal("show");
+            },
             deleteCustomer(id){
                 Swal.fire({
                     title: 'Are you sure?',
@@ -120,7 +177,24 @@
                 })
             },
             loadCustomers(){
-                axios.get('api/customer').then(({ data }) => (this.customers = data));
+                axios.get('api/customer').then(({data}) => 
+                    {
+                        this.customers = data;
+                        setTimeout(function () {
+                            $('#myTable').DataTable(
+                                {
+                                    pageLength: 5,
+                                    processing: true,
+                                    dom: 'Bfrtip',
+                                    buttons: ['copy', 'csv', 'print']
+                                }
+                            );
+                        },
+                            1
+                            );
+                        })
+                    /* axios.get('api/customer').then(({ data }) => (this.customers = data)); */
+                
             },
             createCustomer(){
                 this.$Progress.start();
@@ -144,6 +218,7 @@
             Fire.$on('refreshData', () => {
                 this.loadCustomers();
             });
+
         }
     }
 </script>

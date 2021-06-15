@@ -68575,3 +68575,24 @@ readers do not read off random characters that represent icons */
   background-color: #3490dc;
   color: white !important;
 }
+
+/* html, body{
+    font-size: 13px;
+} */
+.star-rating {
+  display: inline-block;
+  color: gold;
+  font-size: 4rem;
+  position: relative;
+}
+
+.star-rating .star-rating__current {
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.flip-list-move {
+  transition: transform 1s;
+}
